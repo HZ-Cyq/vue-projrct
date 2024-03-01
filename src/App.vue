@@ -15,7 +15,46 @@ import TheWelcome from './components/TheWelcome.vue'
   <main>
     <TheWelcome />
   </main>
+  <div>
+    text的值是{{text}}
+  </div>
 </template>
+<script>
+  export default {
+    data() {
+      return {
+        text:'千里之行，始于足下',
+      }
+    },
+
+    beforeCreate() {
+      console.log("before create");
+    },
+    created() {
+      console.log("created");
+    },
+    beforeMount() {
+      console.log("beore mount");
+    },
+    mounted() {
+      console.log("mounted over");
+    },
+    beforeUpdate() {
+      console.log("before update");
+    },
+    updated() {
+      console.log("updated");
+    },
+    beforeDestroy() {
+      console.log("before Destory");
+    },
+    // todo 怎么触发destroyed方法？
+    destroyed() {
+      console.log("destroyed");
+    }
+  }
+
+</script>
 
 <style scoped>
 header {
