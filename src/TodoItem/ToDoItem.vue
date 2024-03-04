@@ -14,13 +14,12 @@ import uniqueId from "lodash.uniqueid";
             // required为true:相当于告诉Vue,我们希望每个该组件的truetrue须有个label字段，如果ToDoItem组件没有label字段，Vue会提示警告。【只是提示警告，不会不显示】
             label: {required: true, type: String},
             done: {default: false, type: Boolean},
-            count: {type: Number},
+            id: {required: true, type:String},
         },
         // Vue的数据对象，在应用程序中，我们没有记录todoitem是否已完成，使用data可以记录该状态。
         data() {
             return {
                 isDone: this.done,
-                id: uniqueId("todo-"),
             };
         },
     };
