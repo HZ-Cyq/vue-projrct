@@ -1,13 +1,30 @@
 <template>
+  <div class="stack-small" v-if="!isEditing">
     <div class="custom-checkbox">
        <input type="checkbox" :id="id" :checked="isDone" class="checkbox" @change="$emit('checkbox-changed')"/>
        <label :for="id" class="checkbox-label">{{label}}</label> 
        <!-- <input type="checkbox" id="todo-item" :checked="isDone"/> -->
        <!-- <label :for="label">dwq</label> -->
     </div>
+    <div class="btn-group">
+      <button type="button" class="btn" @click="toggleToItemEditForm">
+        Eidt <span class="visually-hidden">{{label}}</span>
+      </button>
+      <button type="button" class="btn btn__danger" @click="deleteToDo">
+        Delete <span class="visually-hidden">{{label}}</span>
+      </button>
+    </div>
+  </div>
+  <to-do-item-edit-form v-else 
+    :id="id" 
+    :label="label"
+    @item-edited="itemEdited"
+    @edit-cancelled="editCancelled">
+  </to-do-item-edit-form>
 </template>
 <script>
 import uniqueId from "lodash.uniqueid";
+import ToDoItemEditForm from "./ToDoItemEditForm.vue";
     export default {
         // 使用props让组件动态化，prop的值给予了组件影响其显示的初始状态
         props: {
@@ -16,12 +33,35 @@ import uniqueId from "lodash.uniqueid";
             done: {default: false, type: Boolean},
             id: {required: true, type: String},
         },
+        components: {
+          ToDoItemEditForm,
+        },
         // Vue的数据对象，在应用程序中，我们没有记录todoitem是否已完成，使用data可以记录该状态。
         data() {
             return {
-                isDone: this.done,
+                isEditing: false,
             };
         },
+        computed: {
+          isDone() {
+            return this.done;
+          }
+        },
+        methods: {
+          deleteToDo() {
+            this.$emit("item-deleted");
+          },
+          toggleToItemEditForm() {
+            this.isEditing = true;
+          },
+          itemEdited(newLabel) {
+            this.$emit('item-edited', newLabel);
+            this.isEditing = false;
+          },
+          editCancelled() {
+            this.isEditing = false;
+          }
+        }
     };
 </script>
 <style scoped>

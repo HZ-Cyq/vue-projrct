@@ -6,7 +6,15 @@
         <ul aria-labelledby="list-summary" class="stack-large">
             <li v-for="item in ToDoItems" :key="item.id">
                 <!-- <to-do-item label="My ToDo Item" :done="true"></to-do-item> -->
-                <to-do-item :label="item.label" :done="item.done" :id="item.id" @checkbox-changed="updateDoneStatus(item.id)"></to-do-item>
+                <to-do-item 
+                  :label="item.label" 
+                  :done="item.done" 
+                  :id="item.id" 
+                  @checkbox-changed="updateDoneStatus(item.id)"
+                  @item-deleted="deleteToDo(item.id)"
+                  @item-edited="editToDo(item.id, $event)"
+                  >
+                </to-do-item>
             </li>
         </ul>
     </div>
@@ -24,9 +32,9 @@
             return {
                 ToDoItems: [
                     { id: uniqueId("todo-"), label: "Learn Vue", done: false },
-                    { id: uniqueId("todo-"), label: "Create a Vue project with the CLI",done: true},
-                    { id: uniqueId("todo-"), label: "Have fun", done: true },
-                    { id: uniqueId("todo-"), label: "Create a to-do list", done: false },
+                    // { id: uniqueId("todo-"), label: "Create a Vue project with the CLI",done: true},
+                    // { id: uniqueId("todo-"), label: "Have fun", done: true },
+                    // { id: uniqueId("todo-"), label: "Create a to-do list", done: false },
                   ],
             };
         },
@@ -37,7 +45,15 @@
             updateDoneStatus(toDoId) {
                 let toDoToUpdate = this.ToDoItems.find((item)=>item.id === toDoId);
                 toDoToUpdate.done = !toDoToUpdate.done;
-            }
+            },
+            deleteToDo(toDoId) {
+                const itemIndex = this.ToDoItems.findIndex((item) => item.id === toDoId);
+                this.ToDoItems.splice(itemIndex, 1);
+            },
+            editToDo(toDoId, newLabel) {
+                const toDoToEdit = this.ToDoItems.find((item) => item.id === toDoId);
+                toDoToEdit.label = newLabel;
+            },
         },
         computed: {
             listSummary() {
